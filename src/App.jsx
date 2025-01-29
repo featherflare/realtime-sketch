@@ -5,7 +5,6 @@ function App() {
   const canvasRef = useRef()
 
   useEffect(() => {
-    console.log('test')
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
 
