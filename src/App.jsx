@@ -3,6 +3,8 @@ import './assets/styles/App.scss'
 
 function App() {
   const canvasRef = useRef()
+  const contentRef = useRef()
+  const [card, setCard] = useState([])
   let particles
 
   const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
@@ -10,7 +12,31 @@ function App() {
   const width = window.innerWidth
   const height = window.innerHeight
 
+  const cardContentMock = [
+    { title: 'Card 1', content: 'card card card', file: 'test' },
+    { title: 'Card 2', content: 'card card card', file: 'test' },
+    { title: 'Card 3', content: 'card card card', file: 'test' },
+    { title: 'Card 4', content: 'card card card', file: 'test' },
+    { title: 'Card 5', content: 'card card card', file: 'test' },
+    { title: 'Card 6', content: 'card card card', file: 'test' },
+    { title: 'Card 7', content: 'card card card', file: 'test' },
+    { title: 'Card 8', content: 'card card card', file: 'test' },
+    { title: 'Card 9', content: 'card card card', file: 'test' },
+    { title: 'Card 10', content: 'card card card', file: 'test' },
+  ]
+
   useEffect(() => {
+    /*** 
+     * 
+    Card Set Up
+     * 
+    ***/
+
+    /*** 
+     * 
+    Canvas Set Up
+     * 
+    ***/
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
 
@@ -161,25 +187,27 @@ function App() {
         <canvas ref={canvasRef} />
       </div>
       <div className='cardboard'>
-        <svg>
-          <defs>
-            <pattern
-              id='dashedPattern'
-              width='30'
-              height='30'
-              patternUnits='userSpaceOnUse'
-            >
-              <path
-                d='M0.5 30V0.5H30'
-                fill='none'
-                stroke='black'
-                strokeWidth='1'
-                strokeDasharray='4 2'
-              />
-            </pattern>
-          </defs>
-          <rect fill='url(#dashedPattern)' />
-        </svg>
+        <div className='cardboard-content' ref={contentRef}>
+          <svg>
+            <defs>
+              <pattern
+                id='dashedPattern'
+                width='30'
+                height='30'
+                patternUnits='userSpaceOnUse'
+              >
+                <path
+                  d='M0.5 30V0.5H30'
+                  fill='none'
+                  stroke='black'
+                  strokeWidth='1'
+                  strokeDasharray='4 2'
+                />
+              </pattern>
+            </defs>
+            <rect fill='url(#dashedPattern)' />
+          </svg>
+        </div>
         <div className='cardboard-header'>
           <div className='cardboard-event-name'>Project Name</div>
           <div className='cardboard-user-online'>
