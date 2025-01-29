@@ -11,20 +11,63 @@ $color-gray-400: #6c6c6ce6;
   border: 1px solid #181818;
   backdrop-filter: blur(2px);
   overflow: hidden;
+
   .cardboard-header {
     width: 46dvh;
     height: 3dvh;
-    background-color: #181818;
+    background-color: #181818cf;
+    backdrop-filter: blur(2px);
     color: #fff;
     padding: 1dvh 2dvh;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .cardboard-event-name {
       font-variant: small-caps;
       font-size: 2dvh;
     }
+
+    .cardboard-user-online {
+      align-items: center;
+      display: flex;
+      gap: 24px;
+
+      .cardboard-point {
+        position: relative;
+        .cardboard-point-inner {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #00ff51;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .cardboard-point-outer {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background-color: #9fffbd;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transform-origin: center;
+          animation: flash 1s normal both infinite;
+          margin: 0px auto 0px auto;
+        }
+      }
+    }
   }
+
   svg {
     position: absolute;
     top: 0;
@@ -41,5 +84,17 @@ $color-gray-400: #6c6c6ce6;
       height: 100dvh;
       width: 50dvh;
     }
+  }
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 }

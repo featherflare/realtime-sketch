@@ -182,9 +182,12 @@ function App() {
         </svg>
         <div className='cardboard-header'>
           <div className='cardboard-event-name'>Project Name</div>
-          <div>
-            <div></div>
-            <div></div>
+          <div className='cardboard-user-online'>
+            <div className='cardboard-point'>
+              <span className='cardboard-point-outer'></span>
+              <span className='cardboard-point-inner'></span>
+            </div>
+            <div>1</div>
           </div>
         </div>
       </div>
