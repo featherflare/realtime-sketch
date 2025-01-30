@@ -74,6 +74,8 @@
     position: relative;
     height: 100dvh;
     width: 50dvh;
+    perspective: 800px;
+
     svg {
       position: absolute;
       top: 0;

@@ -2,14 +2,19 @@ import { useEffect, useRef, useState } from 'react'
 import './assets/styles/App.scss'
 import Card from './components/Card'
 import gsap from 'gsap'
+import Draggable from 'gsap/Draggable'
 import { useGSAP } from '@gsap/react'
 
+gsap.registerPlugin(Draggable)
 gsap.registerPlugin(useGSAP)
 
 function App() {
   const canvasRef = useRef()
   const contentRef = useRef()
   const [card, setCard] = useState([])
+  const [isCardClicked, setIsCardClicked] = useState(null) // Track if any card has been clicked
+  const [clickedCardIndex, setClickedCardIndex] = useState(null) // Track the index of the clicked card
+  const tl = useRef()
   let particles = [] // Initialize particles array
 
   const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
@@ -63,11 +68,11 @@ function App() {
       init(ctx, canvas)
     }
 
-    window.addEventListener('resize', handleResize)
+    addEventListener('resize', handleResize)
 
     // Cleanup event listener on unmount
     return () => {
-      window.removeEventListener('resize', handleResize)
+      removeEventListener('resize', handleResize)
     }
   }, [])
 
@@ -96,11 +101,29 @@ function App() {
         {
           y: '400%',
           x: index % 2 === 0 ? '250%' : '-250%',
+          rotate: index % 2 === 0 ? 50 : -50,
+          rotateX: -90,
+          scale: 2,
         },
         {
-          delay: 0.2 * index,
+          delay: 0.3 * index,
           y: '0%',
           x: '0%',
+          rotate: 0,
+          rotateX: 0,
+          ease: 'power1.inOut',
+          duration: 1,
+          scale: 1,
+          onComplete: () => {
+            gsap.to(cardE, {
+              x: `${index}%`,
+              onComplete: () => {
+                if (index === cardElement.length - 1) {
+                  randomLocation()
+                }
+              },
+            })
+          },
         }
       )
       // console.log(cardE.offsetHeight)
@@ -113,7 +136,48 @@ function App() {
       // cardE.style.transform = `translate(${x}%, ${y}%) rotate(${rotation}deg)`
       // cardE.style.transformOrigin = 'center top'
     })
+
+    function randomLocation() {
+      cardElement.forEach((el, index) => {
+        gsap.to(el, {
+          delay: 0.3 * (cardElement.length - 1 - index),
+          x: `${-127.5 + 127.5 * (index % 3)}%`,
+          y: `${-175 + 80 * (index % 5) - 20 + 40 * Math.random()}%`,
+          rotate: Math.random() * (20 - -20) + -20,
+          duration: 0.5,
+          onComplete: () => {
+            setIsCardClicked(true)
+            makeDraggable(el)
+          },
+        })
+      })
+    }
   }
+
+  const makeDraggable = (el) => {
+    Draggable.create(el, {
+      type: 'x,y',
+      edgeResistance: 0.7,
+      bounds: contentRef.current,
+      inertia: true,
+      onDragStart: () => gsap.to(el, { scale: 1.1, duration: 0.2 }),
+      onDragEnd: () => gsap.to(el, { scale: 1, duration: 0.2 }),
+    })
+  }
+
+  const cardHandleClick = (index) => {
+    console.log(index)
+    if (isCardClicked) {
+      // tl.current = gsap.timeline().to()
+      setIsCardClicked(false)
+    } else {
+      setIsCardClicked(true)
+    }
+  }
+
+  useEffect(() => {
+    console.log('isCardClicked updated:', isCardClicked)
+  }, [isCardClicked])
 
   // function addCard() {
   //   setCard((prevCards) => [
@@ -142,15 +206,13 @@ function App() {
   const animate = (ctx, canvas) => {
     ctx.fillStyle = 'rgba(10, 10, 10,1)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.translate(canvas.width / 2, canvas.height / 2)
 
     ctx.save()
-
     particles.forEach((particle) => {
       particle.update(canvas)
     })
-
     ctx.restore()
+
     requestAnimationFrame(() => animate(ctx, canvas))
   }
 
@@ -193,8 +255,9 @@ function App() {
       this.size = size
     }
 
-    draw() {
+    draw(canvas) {
       this.c.save()
+      this.c.translate(canvas.width / 2, canvas.height / 2)
       this.c.beginPath()
       // this.c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
 
@@ -236,7 +299,7 @@ function App() {
     }
 
     update(canvas) {
-      this.draw()
+      this.draw(canvas)
       this.x += this.velocity.x
       this.y += this.velocity.y
       if (
@@ -287,6 +350,9 @@ function App() {
               title={cardData.title}
               content={cardData.content}
               file={cardData.file}
+              onClick={(e) => {
+                cardHandleClick(i)
+              }}
             />
           ))}
         </div>
