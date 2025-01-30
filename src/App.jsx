@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import './assets/styles/App.scss'
+import Card from './components/Card'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(useGSAP)
 
 function App() {
   const canvasRef = useRef()
   const contentRef = useRef()
   const [card, setCard] = useState([])
-  let particles
+  let particles = [] // Initialize particles array
 
   const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
 
@@ -15,7 +20,11 @@ function App() {
   const cardContentMock = [
     { title: 'Card 1', content: 'card card card', file: 'test' },
     { title: 'Card 2', content: 'card card card', file: 'test' },
-    { title: 'Card 3', content: 'card card card', file: 'test' },
+    {
+      title: 'Card 3',
+      content: 'card card card card card card card card card card card card',
+      file: 'test',
+    },
     { title: 'Card 4', content: 'card card card', file: 'test' },
     { title: 'Card 5', content: 'card card card', file: 'test' },
     { title: 'Card 6', content: 'card card card', file: 'test' },
@@ -31,6 +40,7 @@ function App() {
     Card Set Up
      * 
     ***/
+    loadCardContent()
 
     /*** 
      * 
@@ -61,29 +71,92 @@ function App() {
     }
   }, [])
 
+  /*** 
+     * 
+    Card Set Up
+     * 
+    ***/
+
+  useEffect(() => {
+    cardAnimation()
+  }, [card])
+
+  function loadCardContent() {
+    // Replace with your own logic to fetch card data
+    setCard(cardContentMock)
+    // addCard()
+  }
+
+  const cardAnimation = () => {
+    const content = contentRef.current
+    const cardElement = content.querySelectorAll('.card')
+    cardElement.forEach((cardE, index) => {
+      gsap.fromTo(
+        cardE,
+        {
+          y: '400%',
+          x: index % 2 === 0 ? '250%' : '-250%',
+        },
+        {
+          delay: 0.2 * index,
+          y: '0%',
+          x: '0%',
+        }
+      )
+      // console.log(cardE.offsetHeight)
+      // // 20 - 275
+      // const x = 20 + 127.5 * (index % 3)
+      // // 30 - 350
+      // const y = 30 + (380 - 30) * Math.random()
+      // // 0.08 * height + (0.71 - 0.08) * Math.random() * height
+      // const rotation = Math.random() * (20 - -20) + -20
+      // cardE.style.transform = `translate(${x}%, ${y}%) rotate(${rotation}deg)`
+      // cardE.style.transformOrigin = 'center top'
+    })
+  }
+
+  // function addCard() {
+  //   setCard((prevCards) => [
+  //     ...prevCards,
+  //     {
+  //       title: `Card ${prevCards.length + 1}`,
+  //       content: 'New card added',
+  //       file: 'test',
+  //     },
+  //   ])
+  // }
+
+  /*** 
+     * 
+    Canvas Set Up
+     * 
+    ***/
+
+  // Resize canvas
   const resizeCanvas = (canvas) => {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
   }
 
+  // Animation
   const animate = (ctx, canvas) => {
-    var opacity = 1
-    ctx.save()
     ctx.fillStyle = 'rgba(10, 10, 10,1)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    requestAnimationFrame(() => animate(ctx, canvas))
-
     ctx.translate(canvas.width / 2, canvas.height / 2)
+
+    ctx.save()
+
     particles.forEach((particle) => {
       particle.update(canvas)
     })
 
     ctx.restore()
+    requestAnimationFrame(() => animate(ctx, canvas))
   }
 
+  // Start Function Setup Particles
   function init(ctx, canvas) {
     particles = []
-
     const particlesCount = 80
 
     for (let i = 0; i < particlesCount; i++) {
@@ -207,6 +280,15 @@ function App() {
             </defs>
             <rect fill='url(#dashedPattern)' />
           </svg>
+          {card.map((cardData, i) => (
+            <Card
+              key={i}
+              index={i}
+              title={cardData.title}
+              content={cardData.content}
+              file={cardData.file}
+            />
+          ))}
         </div>
         <div className='cardboard-header'>
           <div className='cardboard-event-name'>Project Name</div>

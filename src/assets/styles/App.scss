@@ -1,4 +1,5 @@
-$color-gray-400: #6c6c6ce6;
+@import 'global';
+
 .cardboard {
   position: absolute;
   top: 50%;
@@ -8,11 +9,13 @@ $color-gray-400: #6c6c6ce6;
   transform: translate(-50%, -50%);
   border-radius: 24px;
   background-color: #0b0b0be6;
-  border: 2px solid #181818;
+  border: $border-colors;
   backdrop-filter: blur(2px);
   overflow: hidden;
 
   .cardboard-header {
+    position: absolute;
+    top: 0;
     width: 46dvh;
     height: 3dvh;
     background-color: #181818cf;
@@ -67,22 +70,26 @@ $color-gray-400: #6c6c6ce6;
       }
     }
   }
-
-  svg {
-    position: absolute;
-    top: 0;
+  .cardboard-content {
+    position: relative;
     height: 100dvh;
     width: 50dvh;
-    z-index: -1;
-
-    path {
-      stroke: color-mix(in srgb, $color-gray-400 30%, transparent);
-      fill: color-mix(in srgb, $color-gray-400 0%, transparent);
-    }
-
-    rect {
+    svg {
+      position: absolute;
+      top: 0;
       height: 100dvh;
       width: 50dvh;
+      z-index: -1;
+
+      path {
+        stroke: color-mix(in srgb, $color-gray-400 30%, transparent);
+        fill: color-mix(in srgb, $color-gray-400 0%, transparent);
+      }
+
+      rect {
+        height: 100dvh;
+        width: 50dvh;
+      }
     }
   }
 }

@@ -1,0 +1,35 @@
+@import 'global';
+
+.card {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  width: calc(25% - 20px);
+  background-color: $card-colors;
+  border: $border-colors;
+  border-radius: 12px;
+  padding: 10px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+
+  .card-media {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: white;
+    background-image: url('image.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    padding: 10px 0;
+    color: rgb(122, 122, 122);
+  }
+
+  .card-content {
+    font-size: 14px;
+    color: #fff;
+  }
+}
