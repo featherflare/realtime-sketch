@@ -108,8 +108,8 @@ function App() {
         },
         {
           delay: 0.3 * index,
-          y: '0%',
-          x: '0%',
+          y: '-50%',
+          x: '-50%',
           rotate: 0,
           rotateX: 0,
           ease: 'power1.inOut',
@@ -117,8 +117,8 @@ function App() {
           scale: 1,
           onComplete: () => {
             gsap.to(cardE, {
-              x: `${index}%`,
-              y: '0%',
+              x: `${-50 + index}%`,
+              y: '-50%',
               onComplete: () => {
                 if (index === cardElement.length - 1) {
                   randomLocation()
@@ -134,8 +134,8 @@ function App() {
       cardElement.forEach((el, index) => {
         gsap.to(el, {
           delay: 0.3 * (cardElement.length - 1 - index),
-          x: `${-127.5 + 127.5 * (index % 3)}%`,
-          y: `${-175 + 80 * (index % 5) - 20 + 40 * Math.random()}%`,
+          x: `${-50 + -127.5 + 127.5 * (index % 3)}%`,
+          y: `${-50 + -175 + 80 * (index % 5) - 20 + 30 * Math.random()}%`,
           rotate: Math.random() * (20 - -20) + -20,
           duration: 0.5,
           onComplete: () => {
