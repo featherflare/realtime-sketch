@@ -15,6 +15,8 @@ function App() {
   const [isCardClicked, setIsCardClicked] = useState(null) // Track if any card has been clicked
   const [clickedCardIndex, setClickedCardIndex] = useState(null) // Track the index of the clicked card
   const tl = useRef()
+  const element = useRef()
+  const [cardEvent, setCardEvent] = useState(null)
   let particles = [] // Initialize particles array
 
   const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
@@ -140,37 +142,99 @@ function App() {
           duration: 0.5,
           onComplete: () => {
             setIsCardClicked(true)
-            makeDraggable(el)
+            makeDraggable(el, index)
+            if (index === 0) {
+              randomShowCard() // Trigger when the last animation completes
+              startRandomLoop() // Start the loop
+            }
           },
         })
       })
     }
   }
 
-  const makeDraggable = (el) => {
+  const makeDraggable = (el, index) => {
     Draggable.create(el, {
       type: 'x,y',
       edgeResistance: 0.7,
       bounds: contentRef.current,
       inertia: true,
+      onClick: () => {
+        element.current = el
+        setCardEvent('click')
+      },
+      onDrag: () => {},
       onDragStart: () => gsap.to(el, { scale: 1.1, duration: 0.2 }),
-      onDragEnd: () => gsap.to(el, { scale: 1, duration: 0.2 }),
+      onDragEnd: () => {
+        gsap.to(el, { scale: 1, duration: 0.2 })
+        setCardEvent('drag')
+      },
     })
   }
 
-  const cardHandleClick = (index) => {
-    console.log(index)
-    if (isCardClicked) {
-      // tl.current = gsap.timeline().to()
+  const cardHandleClick = () => {
+    // console.log(cardEvent)
+    if (isCardClicked && cardEvent === 'click') {
+      tl.current = gsap.timeline().to(element.current, {
+        scale: 3,
+        duration: 0.5,
+        rotate: 0,
+        x: '-50%',
+        y: '-50%',
+      })
       setIsCardClicked(false)
-    } else {
+    } else if (!isCardClicked && cardEvent === 'click') {
+      tl.current.reversed(!tl.current.reversed())
       setIsCardClicked(true)
     }
   }
 
+  const randomShowCard = () => {
+    const content = contentRef.current
+    const cardElement = content.querySelectorAll('.card')
+    const randomIndex = Math.floor(Math.random() * cardElement.length)
+
+    element.current = cardElement[randomIndex]
+
+    // Find the highest z-index among all cards
+    let maxZIndex = 0
+    cardElement.forEach((card) => {
+      const zIndex = parseInt(card.style.zIndex) || 0
+      if (zIndex > maxZIndex) {
+        maxZIndex = zIndex
+      }
+    })
+
+    // Set the selected card's z-index to maxZIndex + 10
+    element.current.style.zIndex = maxZIndex + 1
+
+    setCardEvent('click')
+  }
+
+  let intervalId
+
+  function startRandomLoop() {
+    if (intervalId) clearInterval(intervalId) // Clear existing interval
+    intervalId = setInterval(() => {
+      randomShowCard()
+    }, 5000) // Every 5 seconds
+  }
+
+  useEffect(() => {
+    console.log('isCardEvent updated:', cardEvent)
+    if (cardEvent === 'click') {
+      cardHandleClick()
+    }
+    return setCardEvent('')
+  }, [cardEvent])
+
   useEffect(() => {
     console.log('isCardClicked updated:', isCardClicked)
   }, [isCardClicked])
+
+  useEffect(() => {
+    console.log('clickedCardIndex updated:', clickedCardIndex)
+  }, [clickedCardIndex])
 
   // function addCard() {
   //   setCard((prevCards) => [
@@ -343,9 +407,9 @@ function App() {
               title={cardData.title}
               content={cardData.content}
               file={cardData.file}
-              onClick={(e) => {
-                cardHandleClick(i)
-              }}
+              // onClick={(e) => {
+              //   cardHandleClick(i)
+              // }}
             />
           ))}
         </div>
