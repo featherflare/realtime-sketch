@@ -7,7 +7,7 @@
   height: 95dvh;
   width: 50dvh;
   transform: translate(-50%, -50%);
-  border-radius: 24px;
+  border-radius: 2dvh;
   background-color: #0b0b0be6;
   border: $border-colors;
   backdrop-filter: blur(2px);
@@ -34,7 +34,8 @@
     .cardboard-user-online {
       align-items: center;
       display: flex;
-      gap: 24px;
+      gap: 2dvh;
+      font-size: 2dvh;
 
       .cardboard-point {
         position: relative;
@@ -43,8 +44,8 @@
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 10px;
-          height: 10px;
+          width: 0.8dvh;
+          height: 0.8dvh;
           border-radius: 50%;
           background-color: #00ff51;
           display: flex;
@@ -56,8 +57,8 @@
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 24px;
-          height: 24px;
+          width: 2dvh;
+          height: 2dvh;
           border-radius: 50%;
           background-color: #9fffbd;
           display: flex;

@@ -99,11 +99,12 @@ function App() {
       gsap.fromTo(
         cardE,
         {
-          y: '400%',
+          y: '600%',
           x: index % 2 === 0 ? '250%' : '-250%',
           rotate: index % 2 === 0 ? 50 : -50,
           rotateX: -90,
           scale: 2,
+          transformOrigin: 'center',
         },
         {
           delay: 0.3 * index,
@@ -117,6 +118,7 @@ function App() {
           onComplete: () => {
             gsap.to(cardE, {
               x: `${index}%`,
+              y: '0%',
               onComplete: () => {
                 if (index === cardElement.length - 1) {
                   randomLocation()
@@ -126,15 +128,6 @@ function App() {
           },
         }
       )
-      // console.log(cardE.offsetHeight)
-      // // 20 - 275
-      // const x = 20 + 127.5 * (index % 3)
-      // // 30 - 350
-      // const y = 30 + (380 - 30) * Math.random()
-      // // 0.08 * height + (0.71 - 0.08) * Math.random() * height
-      // const rotation = Math.random() * (20 - -20) + -20
-      // cardE.style.transform = `translate(${x}%, ${y}%) rotate(${rotation}deg)`
-      // cardE.style.transformOrigin = 'center top'
     })
 
     function randomLocation() {
@@ -225,7 +218,7 @@ function App() {
       const x = canvas.width * Math.random() - canvas.width / 2
       const y = canvas.height * Math.random() - canvas.height / 2
       const radius = Math.random() * 2 + 1
-      const size = Math.random() * 5 + 3
+      const size = Math.random() * (0.01 * canvas.width) + 0.005 * canvas.width
 
       const color = colors[Math.floor(Math.random() * colors.length)]
       particles.push(

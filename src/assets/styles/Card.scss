@@ -7,8 +7,8 @@
   width: calc(25% - 20px);
   background-color: $card-colors;
   border: $border-colors;
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 0.8dvh;
+  padding: 0.8dvh;
   transform: translate(-50%, -50%);
   transform-origin: center center;
 
@@ -19,17 +19,17 @@
     background-image: url('image.jpg');
     background-size: cover;
     background-position: center;
-    border-radius: 4px;
+    border-radius: 0.2dvh;
   }
 
   .card-title {
-    font-size: 16px;
-    padding: 10px 0;
+    font-size: 1dvh;
+    padding: 0.8dvh 0;
     color: rgb(122, 122, 122);
   }
 
   .card-content {
-    font-size: 14px;
+    font-size: 0.9dvh;
     color: #fff;
   }
 }
